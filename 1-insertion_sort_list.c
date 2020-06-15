@@ -20,33 +20,35 @@
 /**
  * insertion_sort_list - function to sort doubly linked list in ascending order
  * @list: doubly linked list
+ * Return: void
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current = (*list)->next;
+	listint_t *current = NULL;
 
-	if (!list || !(*list))
+	if (list == NULL || *list == NULL)
 		return;
 
-	while (current)
+	current = (*list)->next;
+
+	for (; current != NULL; current = current->next)
 	{
-		while (current->prev &&
+		while (current->prev != NULL &&
 				current->n < current->prev->n)
 		{
 			current->prev->next = current->next;
-			if (current->next)
+
+			if (current->next != NULL)
 				current->next->prev = current->prev;
 			current->next = current->prev;
 			current->prev = current->prev->prev;
 			current->next->prev = current;
 
-			if (!(current->prev))
+			if (current->prev == NULL)
 				*list = current;
 			else
 				current->prev->next = current;
 			print_list(*list);
 		}
-		current = current->next;
 	}
 }
-
