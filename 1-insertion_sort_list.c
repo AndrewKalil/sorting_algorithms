@@ -21,47 +21,32 @@
  * insertion_sort_list - function to sort doubly linked list in ascending order
  * @list: doubly linked list
  */
-
-void sorted_insert(listint_t **head_ref, listint_t *new_node);
-
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *sorted = NULL;
 	listint_t *current = *list;
-	while (current != NULL) {
-		listint_t *next = current->next;
-		current->prev = current->next = NULL;
-		sorted_insert(&sorted, current);
-		current = next;
-	}
-	*list = sorted;
-}
 
-void sorted_insert(listint_t **head_ref, listint_t *new_node)
-{
-	listint_t *current;
+	if (!list || !(*list))
+		return;
 
-	if (*head_ref == NULL)
-		*head_ref = new_node;
+	while (current)
+	{
+		while (current->prev &&
+				current->n < current->prev->n)
+		{
+			current->prev->next = current->next;
+			if (current->next)
+				current->next->prev = current->prev;
+			current->next = current->prev;
+			current->prev = current->prev->prev;
+			current->next->prev = current;
 
-	else if ((*head_ref)->n >= new_node->n) {
-		new_node->next = *head_ref;
-		new_node->next->prev = new_node;
-		*head_ref = new_node;
-	}
-
-	else {
-		current = *head_ref;
-		while (current->next != NULL &&
-				current->next->n < new_node->n)
-			current = current->next;
-
-		new_node->next = current->next;
-
-		if (current->next != NULL)
-			new_node->next->prev = new_node;
-
-		current->next = new_node;
-		new_node->prev = current;
+			if (!(current->prev))
+				*list = current;
+			else
+				current->prev->next = current;
+			print_list(*list);
+		}
+		current = current->next;
 	}
 }
+
